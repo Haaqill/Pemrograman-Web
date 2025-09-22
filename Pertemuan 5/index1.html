@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Form registerasi</title>
+
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center ;
+                height: 100vh;
+            }
+
+            
+            .main {
+                background-color: #fff;
+                border-radius: 15px;
+                box-shadow: 0 0 20px rgba(0,0,0,0.2);
+                padding: 20px;
+                width: 500px;
+            }
+            
+            .main h2 {
+                color: blue;
+                margin-bottom: 20px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+                color: #555;
+                font-weight: bold;
+            }
+
+            input[type="text"],input[type="number"]{
+                width: 100%;
+                margin-bottom: 15px;
+                padding: 10px;
+                box-sizing: border-box;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+
+            button[type="submit"] {
+                padding: 15px;
+                border-radius: 10px;
+                border: none;
+                background-color: blue;
+                color: white;
+                cursor: pointer;
+                width: 100%;
+                font-size: 16px;
+            }
+            
+            .suggestions {
+                border: 1px solid #ccc;
+                max-height: 150px;
+                overflow-y: auto;
+                position: absolute;
+                background: white;
+                width: 200px;
+            }
+
+            .suggestions div {
+                padding: 8px;
+                cursor: pointer;
+            }
+
+            .suggestions div:hover {
+                background: #eee;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="main">
+            <h2>Registeration Form</h2>
+            <form action=""> 
+                <label for="nama">Nama:</label>
+                <input type="text" id="nama" name="nama" required/>
+
+                <label for="nim">NIM:</label>
+                <input type="number" id="nim" name="nim" required/>
+                
+                <label for="matkul">Mata kuliah:</label>
+                <input type="text" id="matkul" name="matkul"required/>
+                <div id="suggestion" class="suggestion"></div>                   
+                <script type="text/javascript">
+                    const matkul = ["Pemrograman Web","Pemrograman Berbasis Objek", "Jaringan Komputer", "Teori Graf", 
+                    "Matematika Diskrit", "Konsep Pengembangan Perangkat Lunak", "Konsep Kecerdasan Artifisial"];
+                    
+                    const input_mk = document.getElementById("matkul");
+                    const suggestion_mk = document.getElementById("suggestion");
+                    
+                    input_mk.addEventListener("input", () => {
+                        const query = input_mk.value.toLowerCase();
+                        suggestionBox.innerHTML = "";
+                        
+                        if (query) {
+                            const filtered = matkul.filter(f => f.toLowerCase().includes(query));
+                            filtered.forEach(f => {
+                                const div = document.createElement("div");
+                                div.textContent = f;
+                                div.addEventListener("click", () => {
+                                    input_mk.value = f;
+                                    suggestionBox.innerHTML = "";
+                                });
+                                suggestionBox.appendChild(div);
+                            });
+                        }
+                    })
+                </script>
+
+                <label for="dosen">Nama dosen</label>
+                <input type="text" id="dosen" name="dosen" required/>
+                <div id="suggestion" class="suggestion"></div>
+                <script type="text/javascript">
+                    const dosen = ["Pak Fajar", "Pak Baskoro", "Pak Irfan", "Pak Aldinata", "Pak Roy", "Bu Sarwo", "Pak Rully"];
+                    
+                    const input_dosen = document.getElementById("dosen");
+                    const suggestionBox = document.getElementById("suggestion");
+                    
+                    input_dosen.addEventListener("input", () => {
+                        const query = input_dosen.value.toLowerCase();
+                        suggestionBox.innerHTML = "";
+                        
+                        if (query) {
+                            const filtered = dosen.filter(f => f.toLowerCase().includes(query));
+                            filtered.forEach(f => {
+                                const div = document.createElement("div");
+                                div.textContent = f;
+                                div.addEventListener("click", () => {
+                                    input_dosen.value = f;
+                                    suggestionBox.innerHTML = "";
+                                });
+                                suggestionBox.appendChild(div);
+                            });
+                        }
+                    })
+                </script>
+
+                
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </body>
+</html>

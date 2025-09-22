@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pencarian kode pos</title>
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center ;
+                height: 100vh;
+            }
+
+            
+            .main {
+                background-color: #fff;
+                border-radius: 15px;
+                box-shadow: 0 0 20px rgba(0,0,0,0.2);
+                padding: 20px;
+                width: 500px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+                color: #555;
+                font-weight: bold;
+            }
+
+            select{
+                width: 100%;
+                margin-bottom: 15px;
+                padding: 10px;
+                box-sizing: border-box;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+
+            button{
+                padding: 15px;
+                border-radius: 10px;
+                border: none;
+                background-color: blue;
+                color: white;
+                cursor: pointer;
+                width: 100%;
+                font-size: 16px;
+            }
+
+            .modal {
+                display: none;
+                position: fixed;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.5);
+                justify-content: center;
+                align-items: center;
+            }
+            .modal-content {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                min-width: 300px;
+            }
+            .close {
+                float: right;
+                cursor: pointer;
+                font-weight: bold;
+            }
+        </style>        
+    </head>
+    <body>
+        <div class="main">
+
+            <label for="provinsi">Provinsi</label>
+            <select name="provinsi" id="provinsi">
+                <option value=""></option>
+                <option value="jatim">Jawa Timur</option>
+                <option value="kaltim">Kalimantan Timur</option>
+            </select>
+            
+            <label for="kotaKab">Kota/Kabupaten</label>
+            <select name="kotaKab" id="kotaKab">
+                <option value=""></option>
+            </select>
+            <script type="text/javascript">
+                const options_kk = {
+                    jatim: ["Ponorogo", "Surabaya"],
+                    kaltim: ["Balikpapan", "Samarinda"]
+                };
+
+                const pilih_prov = document.getElementById("provinsi");
+                const pilih_kotaKab = document.getElementById("kotaKab");
+
+                pilih_prov.addEventListener("change", () => {
+                    const prov = pilih_prov.value;
+
+                    pilih_kotaKab.innerHTML = "<option value=''></option>";
+
+                    if(prov && options_kk[prov]){
+                        options_kk[prov].forEach( kk => {
+                            const option = document.createElement("option");
+                            option.value = kk;
+                            option.textContent = kk;
+                            pilih_kotaKab.appendChild(option);
+                        });
+                    }
+                });
+            </script>
+
+            <label for="kecamatan">Kecamatan</label>
+            <select name="kecamatan" id="kecamatan">
+                <option value=""></option>
+            </select>
+            <script type="text/javascript">
+                const options_kec = {
+                    Ponorogo: ["Badegan", "Jenangan", "Kauman"],
+                    Surabaya: ["Sukolilo", "Rungkut", "Mulyorejo"],
+                    Balikpapan: ["Balikpapan Timur", "Balikpapan Barat", "Balikpapan Utara"],
+                    Samarinda: ["Samarinda Ulu", "Samarinda Seberang", "Palaran"]
+                };
+
+                const pilih_kk = document.getElementById("kotaKab");
+                const pilih_kec = document.getElementById("kecamatan");
+
+                pilih_kk.addEventListener("change", () => {
+                    const kk = pilih_kk.value;
+
+                    pilih_kec.innerHTML = "<option value=''></option>";
+
+                    if(kk && options_kec[kk]){
+                        options_kec[kk].forEach( kec => {
+                            const option = document.createElement("option");
+                            option.value = kec;
+                            option.textContent = kec;
+                            pilih_kec.appendChild(option);
+                        });
+                    }
+                });
+            </script>
+        
+            <button id="submit">Submit</button>
+            <div id="popup" class="modal">
+                <div class="modal-content">
+                    <span id="closeBtn" class="close">&times;</span>
+                    <p id="popupText"></p>
+                </div>
+            </div>
+
+            <script type="text/javascript">
+                const info = {
+                    "Samarinda Ulu": "Kode posnya adalah 75122 - 75128",
+                    "Samarinda Seberang": "Kode posnya adalah 75131 - 75133",
+                    Palaran: "Kode posnya adalah 75241 - 75253",
+                    Sukolilo: "Kode posnya adalah 60111 - 60119",
+                    Rungkut: "Kode posnya adalah 60293 - 60298",
+                    Mulyorejo: "Kode posnya adalah 60112 - 60116",
+                    Badegan: "Kode posnya adalah 63455",
+                    Jenangan: "Kode posnya adalah 63492",
+                    Kauman: "Kode posnya adalah 63451",
+                    "Balikpapan Timur": "Kode posnya adalah 76116 - 76118",
+                    "Balikpapan Barat": "Kode posnya adalah 76131 - 76134",
+                    "Balikpapan Utara": "Kode posnya adalah 76125 - 76136"
+                };
+
+                const select = document.getElementById("kecamatan");
+                const submitBtn = document.getElementById("submit");
+                const popup = document.getElementById("popup");
+                const popupText = document.getElementById("popupText");
+                const closeBtn = document.getElementById("closeBtn");
+
+                submitBtn.addEventListener("click", () => {
+                    const choice = select.value;
+                    if (choice && info[choice]) {
+                        popupText.textContent = info[choice];
+                        popup.style.display = "flex";
+                    } else {
+                        alert("Please select an item first!");
+                    }
+                    });
+
+                    closeBtn.addEventListener("click", () => {
+                        popup.style.display = "none";
+                    });
+
+                    window.addEventListener("click", (e) => {
+                        if (e.target === popup) {
+                            popup.style.display = "none";
+                        }
+                });
+            </script>
+
+        </div>
+    </body>
+</html>

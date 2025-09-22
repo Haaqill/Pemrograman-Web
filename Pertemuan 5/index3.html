@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dynamic Drop Down Menu</title>
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center ;
+                height: 100vh;
+            }
+
+            
+            .main {
+                background-color: #fff;
+                border-radius: 15px;
+                box-shadow: 0 0 20px rgba(0,0,0,0.2);
+                padding: 20px;
+                width: 500px;
+            }
+            
+            .main h2 {
+                color: blue;
+                margin-bottom: 20px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+                color: #555;
+                font-weight: bold;
+            }
+
+            select{
+                width: 100%;
+                margin-bottom: 15px;
+                padding: 10px;
+                box-sizing: border-box;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+
+        </style>        
+    </head>
+
+    <body>
+        <div class="main">
+            <h2>Dynamic Drop Down List</h2>
+            <label for="jenis">Jenis produk</label>
+            <select name="jenis" id="jenis">
+                <option value="">-- Pilih jenis produk --</option>
+                <option value="desktop">Desktop</option>
+                <option value="laptop">Laptop</option>
+                <option value="smartphone">Smartphone</option>
+            </select>
+
+            <label for="merk">Merk produk</label>
+            <select name="merk" id="merk">
+                <option value="">-- Pilih merk produk --</option>
+            </select>
+
+            <script type="text/javascript">
+                const options = {
+                    desktop: ["Apple", "Asus", "Dell", "Lenovo", "MSI", "Xiaomi"],
+                    laptop: ["Asus", "Lenovo", "Acer", "HP", "Dell", "MSI"],
+                    smartphone: ["Asus", "Samsung", "Iphone", "Vivo", "Oppo", "Xiaomi"]
+                };
+
+                const pilihJenis = document.getElementById("jenis");
+                const pilihMerk = document.getElementById("merk");
+
+                pilihJenis.addEventListener("change", () => {
+                    const jenis = pilihJenis.value;
+
+                    pilihMerk.innerHTML = "<option value=''>-- Pilih merk produk --</option>"; 
+                    if(jenis && options[jenis]){
+                        options[jenis].forEach(merk => {
+                            const option = document.createElement("option");
+                            option.value = merk;
+                            option.textContent = merk;
+                            pilihMerk.appendChild(option);
+                        });
+                    }
+                });
+            </script>
+        </div>
+    </body>
+</html>
