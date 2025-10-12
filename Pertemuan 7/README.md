@@ -1,1 +1,162 @@
 # Source Code
+
+### index.html
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Submit form tanpa refresh</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+        <style type="text/css">
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .form-group {
+                padding: 10px;
+                box-sizing: border-box;
+            }
+            
+            .form-control {
+                width: 50%;
+                display: flex;
+                padding: 10px;
+                margin: 10px;
+                box-sizing: border-box;
+                border-radius: 10px;
+                border: 2px solid black;
+            }
+
+            input:focus {
+                background-color: lightgray;
+            }
+
+            textarea {
+                height: 80px;
+            }
+
+            .btn-default {
+                color: white;
+                font-size: 15px;
+                background-color: blue;
+                box-sizing: border-box;
+                border-radius: 10px;
+                width: 100px;
+                height: 40px;
+                margin: 10px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <h1>Form Tanpa Page Refresh</h1>
+        <form name="ContactForm" method="post" action="">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name">
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" class="form-control" id="email">
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea name="message" class="form-control" id="message"></textarea>
+            </div>
+            <button type="button" class="btn btn-default">Submit</button>
+        </form>
+        <div class="message_box" style="margin: 10px 10px;">
+        </div>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                var delay = 2000;
+                $('.btn-default').click(function(e){
+                    e.preventDefault();
+                    var name = $('#name').val();
+                    if(name == ''){
+                        $('.message_box').html(
+                            '<span style="color: red;">Enter Your Name!</span>'
+                        );
+                        $('#name').focus();
+                        return false;
+                    }
+                    var email = $('#email').val();
+                    if(email == ''){
+                        $('.message_box').html(
+                            '<span style="color: red;">Enter Your Email Address!</span>'
+                        );
+                        $('#email').focus();
+                        return false;
+                    }
+                    if($("#email").val() != ''){
+                        if(!isValidEmailAddress($("#email").val())){
+                            $('.message_box').html(
+                                '<span style="color: red;">Provided Email Address is Incorrect!</span>'
+                            );
+                            $('#email').focus();
+                            return false;
+                        }
+                    }
+
+                    var message = $('#message').val();
+                    if(message == ''){
+                        $('.message_box').html(
+                            '<span style="color: red;">Enter Your Message Here!</span>'
+                        );
+                        $('#message').focus();
+                        return false;
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: "ajax.php",
+                        data: "name="+name+"&email="+email+"&message="+message,
+                        beforeSend: function(){
+                            $('.message_box').html(
+                                '<span>Please Wait ...</span>'
+                            );
+                        },
+                        success: function(data){
+                            setTimeout(function(){
+                                $('.message_box').html(data);
+                            }, delay);
+                        }
+                    });
+                });
+            });
+
+            function isValidEmailAddress(emailAddress){
+                var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+                return pattern.test(emailAddress);
+            };
+        </script>
+    </body>
+</html>
+```
+
+### ajax.php
+```php
+<?php
+if(($_POST['name']!="") && ($_POST['email']!="")){
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $message = $_POST['message'];
+
+    $to = "haaqill111@gmail.com";
+    $subject = "ALLPHPTricks Contact Form Email";
+    $message = "<p>New email is received from $name.</p>
+    <p>message</p>";
+
+    $headers  = "MIME-Version: 1.0" . "\r\n";
+    $headers .= "Content-type:text/html; charset=UTF-8" . "\r\n";
+    $headers .= "From: <".$email.">" . "\r\n";
+    $sent = mail($to,$subject,$message,$headers);
+    if($sent){
+        echo "<span style='color:green; font-weight:bold;'>Thank you for contacting us, we will get back to you shortly.</span>";
+    } 
+    else {
+        echo "<span style='color:red; font-weight:bold;'>Sorry! Your form submission is failed.</span>";
+    }
+}
+?>
+```
